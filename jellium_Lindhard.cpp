@@ -39,6 +39,37 @@ std::complex<double> chi_Lindhard_1d(double q, double w){
   return 1.0/(2.0*q) * (tmp1 + tmp2 + tmp3);
 }
 
+std::complex<double> chi_Lindhard_2d(double q, double w){
+  std::complex<double> tmp1, tmp2, tmp3, tmp4;
+  std::complex<double> c_tmp1, c_tmp2;
+
+  tmp1 = 0.5*(w/q-q)+1.0;
+  tmp2 = 0.5*(w/q-q)-1.0;
+  tmp3 = 0.5*(w/q+q)+1.0;
+  tmp4 = 0.5*(w/q+q)-1.0;
+
+  c_tmp1 = std::sqrt(tmp1)*std::sqrt(tmp2);
+  c_tmp2 = std::sqrt(tmp3)*std::sqrt(tmp4);
+
+  return 1.0 + 1.0/q * (c_tmp1-c_tmp2);
+}
+
+std::complex<double> chi_Lindhard_3d(double q, double w){
+  double dtmp1, dtmp2, dtmp3, dtmp4;
+  std::complex<double> ctmp1, ctmp2;
+
+  dtmp1 = 1.0/8.0*std::pow(w/q-q, 2) - 0.5;
+  dtmp2 = std::log( std::abs((w+2.0/q-1.0/(q*q)) / (w-2.0/q-1.0/(q*q))) );
+  ctmp1 = i_cpx*M_PI*step_fcn(4.0/(q*q) - std::pow(w-1.0/(q*q),2));
+
+  dtmp3 = 1.0/8.0*std::pow(w/q+q, 2) - 0.5;
+  dtmp4 = std::log( std::abs((w+2.0/q+1.0/(q*q)) / (w-2.0/q+1.0/(q*q))) );
+  ctmp2 = i_cpx*M_PI*step_fcn(4.0/(q*q) - std::pow(w+1.0/(q*q),2));
+
+  return 1.0/(2.0*q) * (q + dtmp1*(dtmp2-ctmp1) - dtmp3*(dtmp4-ctmp2));
+
+}
+
 int main(){
   
   // log files
@@ -54,11 +85,11 @@ int main(){
   flog << "1. set parameters." << std::endl;
 
   // calculation parameters
-  int dimension = 1;
-  double q_max = 5.0;
-  int N_q = 100;
+  int dimension = 3;
+  double q_max = 3.5;
+  int N_q = 300;
   double w_max = 3.0;
-  int N_w = 100;
+  int N_w = 300;
 
   flog << "dimension = " << dimension << std::endl;
   flog << "q_max = " << q_max << std::endl;
@@ -98,6 +129,24 @@ int main(){
     for(int i = 0; i < N_q; i++){
       for(int j = 0; j < N_w; j++){
         chi_Lindhard[i][j] = chi_Lindhard_1d(q[i], w[j]);
+      }
+    }
+  }
+
+  // 2d
+  else if(dimension == 2){
+    for(int i = 0; i < N_q; i++){
+      for(int j = 0; j < N_w; j++){
+        chi_Lindhard[i][j] = chi_Lindhard_2d(q[i], w[j]);
+      }
+    }
+  }
+
+// 3d
+  else if(dimension == 3){
+    for(int i = 0; i < N_q; i++){
+      for(int j = 0; j < N_w; j++){
+        chi_Lindhard[i][j] = chi_Lindhard_3d(q[i], w[j]);
       }
     }
   }

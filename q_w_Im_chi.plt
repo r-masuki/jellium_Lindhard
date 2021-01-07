@@ -7,7 +7,6 @@ set ylabel "{/Helvetica-Oblique @^-h}{/Symbol w}/{/Symbol e}_F"
 set pm3d 
 set pm3d map
 
-
 set output "result/q_w_Im_chi.eps"
 
 splot "result/q_w_chi.txt" using 1:2:4 with pm3d notitle
