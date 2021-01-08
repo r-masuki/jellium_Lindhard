@@ -59,12 +59,12 @@ std::complex<double> chi_Lindhard_3d(double q, double w){
   std::complex<double> ctmp1, ctmp2;
 
   dtmp1 = 1.0/8.0*std::pow(w/q-q, 2) - 0.5;
-  dtmp2 = std::log( std::abs((w+2.0/q-1.0/(q*q)) / (w-2.0/q-1.0/(q*q))) );
-  ctmp1 = i_cpx*M_PI*step_fcn(4.0/(q*q) - std::pow(w-1.0/(q*q),2));
+  dtmp2 = std::log( std::abs((w+2.0*q-q*q) / (w-2.0*q-q*q)) );
+  ctmp1 = i_cpx*M_PI*step_fcn(4.0*q*q - std::pow(w-q*q,2));
 
   dtmp3 = 1.0/8.0*std::pow(w/q+q, 2) - 0.5;
-  dtmp4 = std::log( std::abs((w+2.0/q+1.0/(q*q)) / (w-2.0/q+1.0/(q*q))) );
-  ctmp2 = i_cpx*M_PI*step_fcn(4.0/(q*q) - std::pow(w+1.0/(q*q),2));
+  dtmp4 = std::log( std::abs((w+2.0*q+q*q) / (w-2.0*q+q*q)) );
+  ctmp2 = i_cpx*M_PI*step_fcn(4.0*q*q - std::pow(w+q*q,2));
 
   return 1.0/(2.0*q) * (q + dtmp1*(dtmp2-ctmp1) - dtmp3*(dtmp4-ctmp2));
 
